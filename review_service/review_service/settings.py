@@ -1,5 +1,7 @@
 # Django settings for review_service project.
+import os
 
+SITE_ROOT = os.path.dirname(os.path.realpath('__file__'))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -8,15 +10,11 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
+DATABASE_NAME = 'development.db'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': DATABASE_NAME,
     }
 }
 
@@ -105,7 +103,7 @@ ROOT_URLCONF = 'review_service.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'review_service.wsgi.application'
 
-TEMPLATE_DIRS = ('/home/luver/dev/review-service/review_service/templates',)
+TEMPLATE_DIRS = ('templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
