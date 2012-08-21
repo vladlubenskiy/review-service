@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 # authorized_only decorator
 from review_service.oauth.google import endpoints
+from services.models import Author
 
 def authorized_only(view_function):
     def wrapper(*args):
@@ -24,6 +25,7 @@ def authorize(view_function, request):
                 write_user_info(session)
             if 'return_to' in session:
                 return get_return_to(session)
+            registerUser(session)
             return view_function(request)
 
     session['return_to'] = request.get_full_path()
@@ -112,6 +114,14 @@ def logout(request):
     return HttpResponse(status=200)
     #    return HttpResponseRedirect(endpoints.LOGOUT_URI) # This will logout user from Google
 
+
+def registerUser(session):
+    user_info = session["user_info"]
+    try:
+        Author.objects.get(email=user_info["email"])
+    except Author.DoesNotExist:
+        author = Author(name=user_info["name"], email=user_info["email"], locked=False)
+        author.save()
 
 urls = patterns('',
     url(r'^logout/$', logout),
